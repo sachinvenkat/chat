@@ -15,7 +15,7 @@ import java.io.*;
  * @author sachin
  */
 
-public class ChatServer2 extends Frame implements ActionListener,Runnable  {
+public class FrenzChat extends Frame implements ActionListener,Runnable  {
 	
 
 	
@@ -51,12 +51,12 @@ public static void main(String[] arg)
 
 {
 		
-	new ChatServer2();
+	new FrenzChat();
 	
 }
 	
 
-	public ChatServer2()
+	public FrenzChat()
 	
 	{
 		
