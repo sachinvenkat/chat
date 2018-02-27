@@ -2,7 +2,9 @@
  * No License for this file
  */
 package chatme;
-
+import java.awt.*;
+import java.awt.event.*;
+import java.net.*;
 import java.io.*;
 /**
  *
@@ -86,3 +88,66 @@ public class ChatClient extends Frame implements ActionListener,Runnable {
        
 		
     }
+	
+    public void actionPerformed(ActionEvent event)
+    {
+    	if(event.getSource()==button1)
+    	{
+    		String hostname=textfield1.getText();
+    		try
+    		{
+    			socket = new Socket(hostname, 13);
+    			
+    			in=socket.getInputStream();
+    			out=socket.getOutputStream();
+    			
+    			textarea1.setText("you are now connected\n");
+    			
+    			thread=new Thread(this);
+    			thread.start();
+
+    		}catch (UnknownHostException e)
+    		{
+    			textarea1.setText(e.getMessage());
+    		}catch (IOException e)
+    		{
+    			textarea1.setText(e.getMessage());
+    		}
+    	}
+    	
+		if(event.getSource()==button2)
+		{
+			try
+			{
+				String str = textarea2.getText() + "\n";
+	            byte buffer[] = str.getBytes();
+	            out.write(buffer);
+	            textarea1.setForeground(Color.RED);
+	            textarea1.append(str+"\n");
+	            textarea2.setText("");
+	            textarea2.requestFocus();
+	        }catch(Exception e){}
+		}
+			
+    }
+	
+        @Override
+	public void run()
+	{
+		String instring;
+        try {
+
+            BufferedReader in = new BufferedReader (new InputStreamReader(socket.getInputStream()));
+
+            textarea1.setForeground(Color.BLUE);
+            while((instring = in.readLine()) != null){
+                textarea1.append(instring + "\n");
+            }
+
+        }catch (Exception e) 
+        {
+            textarea1.setText(e.getMessage());
+        }
+		
+	}
+}
