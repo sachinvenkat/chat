@@ -5,10 +5,9 @@ package chatme;
 
 
 import java.awt.*;
-
-
+import java.awt.event.*;
+import java.net.*;
 import java.io.*;
-
 
 /**
  *
@@ -139,6 +138,67 @@ add(label1);
 
         }
     );
+	
+		try 
+    	{
+    		socket = new ServerSocket(port);
+    		insocket = null;
+    		
+    			try {
+    				insocket = socket.accept( );
+    				//OutputStreamWriter out = new OutputStreamWriter(connection.getOutputStream( ));
+    				in=insocket.getInputStream();
+    				out=insocket.getOutputStream();
+    				
+    				thread=new Thread(this);
+    				thread.start();
+
+    				
+    			}catch (IOException e) {}
+    		
+    	}catch (IOException e)
+    	{
+    		System.err.println(e);
+    	}
+	}
+	
+	public void actionPerformed(ActionEvent event)
+    {
+		if(event.getSource()==button1)
+		{
+			try
+			{
+				String str = textarea2.getText() + "\n";
+	            byte buffer[] = str.getBytes();
+	            out.write(buffer);
+	            textarea1.setForeground(Color.RED);
+	            textarea1.append(str+"\n");
+	            textarea2.setText("");
+	            textarea2.requestFocus();
+			}catch(Exception e){}
+		}
+			
+    }
+		
+		@Override
+	public void run()
+	{
+		String instring;
+        try {
+
+            BufferedReader in = new BufferedReader (new InputStreamReader(socket.getInputStream()));
+
+            textarea1.setForeground(Color.BLUE);
+            while((instring = in.readLine()) != null){
+                textarea1.append(instring + "\n");
+            }
+
+        }catch (Exception e) 
+        {
+            textarea1.setText(e.getMessage());
+        }
+		
+	}
     
 
  }
